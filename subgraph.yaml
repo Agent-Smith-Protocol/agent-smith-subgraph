@@ -1,0 +1,68 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: AgentSmithVault
+    network: arbitrum-one
+    source:
+      address: "0xde51980409B6c9C387D0f04Ed5b8C585F7027cC6"
+      abi: AgentSmithVault
+      startBlock: 302597771
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - DelegateFundsToAgent
+        - Deposit
+        - RequestWithdraw
+        - RoleAdminChanged
+        - RoleGranted
+        - RoleRevoked
+        - Transfer
+        - UpdatePriceParameters
+        - UpdateSmithAddress
+        - UpdateTreasury
+        - UpdateWithdrawFeePercent
+        - Withdraw
+        - WithdrawApproved
+        - WithdrawRejected
+      abis:
+        - name: AgentSmithVault
+          file: ./abis/AgentSmithVault.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: DelegateFundsToAgent(indexed uint256)
+          handler: handleDelegateFundsToAgent
+        - event: Deposit(indexed address,indexed address,uint256,uint256)
+          handler: handleDeposit
+        - event: RequestWithdraw(indexed address,indexed uint256,uint256,uint256)
+          handler: handleRequestWithdraw
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: UpdatePriceParameters(uint256,uint256)
+          handler: handleUpdatePriceParameters
+        - event: UpdateSmithAddress(indexed address)
+          handler: handleUpdateSmithAddress
+        - event: UpdateTreasury(address)
+          handler: handleUpdateTreasury
+        - event: UpdateWithdrawFeePercent(uint32)
+          handler: handleUpdateWithdrawFeePercent
+        - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleWithdraw
+        - event: WithdrawApproved(indexed uint256,uint256)
+          handler: handleWithdrawApproved
+        - event: WithdrawRejected(indexed uint256)
+          handler: handleWithdrawRejected
+      file: ./src/agent-smith-vault.ts
