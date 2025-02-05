@@ -8,6 +8,21 @@ type Approval @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type User @entity {
+  id: ID!
+  address: Bytes!
+  depositBody: BigInt!
+  shares: BigInt!
+  deposits: [Deposit!]! @derivedFrom(field: "owner")
+  requests: [RequestWithdraw!]! @derivedFrom(field: "owner")
+  withdraws: [Withdraw!]! @derivedFrom(field: "owner")
+}
+
+
+
+
+
+
 type DelegateFundsToAgent @entity(immutable: true) {
   id: Bytes!
   assets: BigInt! # uint256
@@ -19,7 +34,7 @@ type DelegateFundsToAgent @entity(immutable: true) {
 type Deposit @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
-  owner: Bytes! # address
+  owner: User! # address
   assets: BigInt! # uint256
   shares: BigInt! # uint256
   blockNumber: BigInt!
@@ -29,7 +44,7 @@ type Deposit @entity(immutable: true) {
 
 type RequestWithdraw @entity(immutable: true) {
   id: Bytes!
-  owner: Bytes! # address
+  owner: User! # address
   requestId: BigInt! # uint256
   sharesAmount: BigInt! # uint256
   timestamp: BigInt! # uint256
@@ -82,6 +97,7 @@ type UpdatePriceParameters @entity(immutable: true) {
   id: Bytes!
   newTotalAssetsStored: BigInt! # uint256
   newTotalSharesMinted: BigInt! # uint256
+  sharesPrice: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -115,7 +131,7 @@ type Withdraw @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   receiver: Bytes! # address
-  owner: Bytes! # address
+  owner: User! # address
   assets: BigInt! # uint256
   shares: BigInt! # uint256
   blockNumber: BigInt!
